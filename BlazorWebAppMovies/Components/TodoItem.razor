@@ -1,8 +1,18 @@
 
-<li>@Item.Title</li>
-
+<li>
+    <span class="@(Item.IsCompleted ? "text-decoration-line-through" : "")">@Item.Title</span>
+    <input type="checkbox" checked="@Item.IsCompleted" @onchange="HandleCheck"/>
+</li>
 
 @code {
     [Parameter]
     public Todo Item { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<Todo> OnCheck { get; set; }
+
+    private async Task HandleCheck()
+    {
+        await OnCheck.InvokeAsync(Item);
+    }
 }

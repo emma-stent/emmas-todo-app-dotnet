@@ -7,12 +7,17 @@
 
 <AddTodo OnAdd="HandleAdd"/>
 
-<TodoList Todos="todos" />
+<TodoList Todos="todos" OnCheck="HandleCheck"/>
 
 @code {
     private void HandleAdd(string text)
     {
         todos.Add(new Todo { Title = text });
+    }
+
+    private void HandleCheck(Todo todo)
+    {
+        todo.IsCompleted = !todo.IsCompleted;
     }
 
     private List<Todo> todos = new()
