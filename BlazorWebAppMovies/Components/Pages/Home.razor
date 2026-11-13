@@ -9,6 +9,8 @@
 
 <TodoList Todos="todos" OnCheck="HandleCheck"/>
 
+<TodoButton OnClick="HandleDeleteCompleted" IsDisabled="!todos.Any(todo => todo.IsCompleted)">Delete Completed Todos</TodoButton>
+
 @code {
     private void HandleAdd(string text)
     {
@@ -18,6 +20,11 @@
     private void HandleCheck(Todo todo)
     {
         todo.IsCompleted = !todo.IsCompleted;
+    }
+
+    private void HandleDeleteCompleted()
+    {
+        todos.RemoveAll(todo => todo.IsCompleted);
     }
 
     private List<Todo> todos = new()
