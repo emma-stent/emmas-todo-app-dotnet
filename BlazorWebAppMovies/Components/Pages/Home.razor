@@ -1,7 +1,17 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
-<h1>Todo</h1>
+<h1>Todo List</h1>
 
-Welcome to your new app.
+<TodoList Todos="todos" />
+
+@code {
+    private List<Todo> todos = new()
+        {
+            new Todo { Title = "Todo 1" },
+            new Todo { Title = "Todo 2" },
+            new Todo { Title = "Todo 3", IsCompleted = true },
+        };
+}

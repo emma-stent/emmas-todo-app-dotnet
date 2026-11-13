@@ -1,0 +1,11 @@
+<ul>
+    @foreach (var item in Todos)
+    {
+        <TodoItem @key=@item.Id Item="item" /> 
+    }
+</ul>
+
+@code {
+    [Parameter]
+    public List<Todo> Todos { get; set; } = new();
+}
