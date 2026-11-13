@@ -1,0 +1,13 @@
+<button disabled="@IsDisabled" @onclick="OnClick" type="@ButtonType">@ChildContent</button>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    [Parameter]
+    public bool IsDisabled { get; set; }
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+    [Parameter]
+    public string ButtonType { get; set; } = "button";
+
+}

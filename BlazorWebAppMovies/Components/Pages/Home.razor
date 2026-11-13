@@ -5,9 +5,16 @@
 
 <h1>Todo List</h1>
 
+<AddTodo OnAdd="HandleAdd"/>
+
 <TodoList Todos="todos" />
 
 @code {
+    private void HandleAdd(string text)
+    {
+        todos.Add(new Todo { Title = text });
+    }
+
     private List<Todo> todos = new()
         {
             new Todo { Title = "Todo 1" },
