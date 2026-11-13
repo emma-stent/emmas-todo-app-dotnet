@@ -7,7 +7,7 @@
 
 <AddTodo OnAdd="HandleAdd"/>
 
-<TodoList Todos="todos" OnCheck="HandleCheck"/>
+<TodoList Todos="todos" OnCheck="HandleCheck" OnSaveNewTitle="HandleSaveNewTitle"/>
 
 <TodoButton OnClick="HandleDeleteCompleted" IsDisabled="!todos.Any(todo => todo.IsCompleted)">Delete Completed Todos</TodoButton>
 
@@ -25,6 +25,11 @@
     private void HandleDeleteCompleted()
     {
         todos.RemoveAll(todo => todo.IsCompleted);
+    }
+
+    private void HandleSaveNewTitle((Todo todo, string NewTitle) newTodo)
+    {
+        newTodo.todo.Title = newTodo.NewTitle;
     }
 
     private List<Todo> todos = new()

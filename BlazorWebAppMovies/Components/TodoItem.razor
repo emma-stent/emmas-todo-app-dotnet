@@ -1,7 +1,14 @@
 
 <li>
-    <span class="@(Item.IsCompleted ? "text-decoration-line-through" : "")">@Item.Title</span>
-    <input type="checkbox" checked="@Item.IsCompleted" @onchange="HandleCheck"/>
+    @if (isBeingEdited){
+        <input @bind=NewTitle />
+        <TodoButton OnClick="HandleSaveNewTitle">Save</TodoButton>
+    } else {
+        <span class="@(Item.IsCompleted ? "text-decoration-line-through" : "")">@Item.Title</span>
+        <input type="checkbox" checked="@Item.IsCompleted" @onchange="HandleCheck"/>
+        @if(!Item.IsCompleted)
+        {<TodoButton OnClick="HandleEdit">Edit</TodoButton>}
+    }
 </li>
 
 @code {
@@ -14,5 +21,28 @@
     private async Task HandleCheck()
     {
         await OnCheck.InvokeAsync(Item);
+    }
+
+    private bool isBeingEdited { get; set; }
+
+    private string NewTitle { get; set; } = "";
+
+    [Parameter]
+    public EventCallback<(Todo todo, string NewTitle)> OnSaveNewTitle { get; set; }
+
+    private async Task HandleSaveNewTitle()
+    {
+        if (string.IsNullOrWhiteSpace(NewTitle))
+        {
+            return;
+        }
+        await OnSaveNewTitle.InvokeAsync((Item, NewTitle));
+        isBeingEdited = false;
+    }
+
+    private void HandleEdit()
+    {
+        isBeingEdited = true;
+        NewTitle = Item.Title;
     }
 }

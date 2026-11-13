@@ -1,7 +1,7 @@
 <ul>
     @foreach (var item in Todos)
     {
-        <TodoItem @key=@item.Id Item="item" OnCheck="OnCheck" /> 
+        <TodoItem @key=@item.Id Item="item" OnCheck="OnCheck" OnSaveNewTitle="OnSaveNewTitle" /> 
     }
 </ul>
 
@@ -11,4 +11,8 @@
 
     [Parameter]
     public EventCallback<Todo> OnCheck { get; set; }
+
+    [Parameter]
+    public EventCallback<(Todo todo, string NewTitle)> OnSaveNewTitle { get; set; }
+
 }
