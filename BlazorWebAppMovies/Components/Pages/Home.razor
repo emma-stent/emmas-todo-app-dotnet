@@ -5,11 +5,17 @@
 
 <h1>Todo List</h1>
 
-<AddTodo OnAdd="HandleAdd"/>
+@foreach (var filterOption in Enum.GetValues<FilterOptions>())
+{
+    <TodoButton OnClick="()=>selectedFilter=filterOption" IsSelected="selectedFilter==filterOption">@filterOption</TodoButton>
+}
 
-<TodoList Todos="todos" OnCheck="HandleCheck" OnSaveNewTitle="HandleSaveNewTitle"/>
+<AddTodo OnAdd="HandleAdd" />
 
-<TodoButton OnClick="HandleDeleteCompleted" IsDisabled="!todos.Any(todo => todo.IsCompleted)">Delete Completed Todos</TodoButton>
+<TodoList Todos="VisibleTodos" OnCheck="HandleCheck" OnSaveNewTitle="HandleSaveNewTitle" />
+
+<TodoButton OnClick="HandleDeleteCompleted" IsDisabled="!todos.Any(todo => todo.IsCompleted)">Delete Completed Todos
+</TodoButton>
 
 @code {
     private void HandleAdd(string text)
@@ -38,4 +44,13 @@
             new Todo { Title = "Todo 2" },
             new Todo { Title = "Todo 3", IsCompleted = true },
         };
+
+    private FilterOptions selectedFilter = FilterOptions.All;
+
+    private List<Todo> VisibleTodos => selectedFilter switch
+    {
+        FilterOptions.Completed => todos.Where(todos => todos.IsCompleted).ToList(),
+        FilterOptions.Uncompleted => todos.Where(todos => !todos.IsCompleted).ToList(),
+        FilterOptions.All => todos,
+    };
 }

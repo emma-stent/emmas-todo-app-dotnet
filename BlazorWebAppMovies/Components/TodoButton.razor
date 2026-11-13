@@ -1,4 +1,5 @@
-<button disabled="@IsDisabled" @onclick="OnClick" type="@ButtonType">@ChildContent</button>
+<button disabled="@IsDisabled" @onclick="OnClick" type="@ButtonType" class="@(IsSelected ?
+        "btn btn-success" : "btn")">@ChildContent </button>
 
 @code {
     [Parameter]
@@ -9,5 +10,7 @@
     public EventCallback OnClick { get; set; }
     [Parameter]
     public string ButtonType { get; set; } = "button";
+    [Parameter]
+    public bool IsSelected { get; set; }
 
 }
