@@ -5,10 +5,13 @@
 
 <h1>Todo List</h1>
 
-@foreach (var filterOption in Enum.GetValues<FilterOptions>())
-{
-    <TodoButton OnClick="()=>selectedFilter=filterOption" IsSelected="selectedFilter==filterOption">@filterOption</TodoButton>
-}
+<div class="btn-group">
+    @foreach (var filterOption in Enum.GetValues<FilterOptions>())
+    {
+        <TodoButton OnClick="() => selectedFilter = filterOption" IsSelected="selectedFilter == filterOption">@filterOption
+        </TodoButton>
+    }
+</div>
 
 <AddTodo OnAdd="HandleAdd" />
 
@@ -18,6 +21,22 @@
 </TodoButton>
 
 @code {
+    private List<Todo> todos = new()
+        {
+            new Todo { Title = "Todo 1" },
+            new Todo { Title = "Todo 2" },
+            new Todo { Title = "Todo 3", IsCompleted = true },
+        };
+
+    private FilterOptions selectedFilter = FilterOptions.All;
+
+    private List<Todo> VisibleTodos => selectedFilter switch
+    {
+        FilterOptions.Completed => todos.Where(todo => todo.IsCompleted).ToList(),
+        FilterOptions.Uncompleted => todos.Where(todo => !todo.IsCompleted).ToList(),
+        _ => todos,
+    };
+
     private void HandleAdd(string text)
     {
         todos.Add(new Todo { Title = text });
@@ -33,24 +52,9 @@
         todos.RemoveAll(todo => todo.IsCompleted);
     }
 
-    private void HandleSaveNewTitle((Todo todo, string NewTitle) newTodo)
+    private void HandleSaveNewTitle((Todo todo, string newTitle) edit)
     {
-        newTodo.todo.Title = newTodo.NewTitle;
+        edit.todo.Title = edit.newTitle;
     }
 
-    private List<Todo> todos = new()
-        {
-            new Todo { Title = "Todo 1" },
-            new Todo { Title = "Todo 2" },
-            new Todo { Title = "Todo 3", IsCompleted = true },
-        };
-
-    private FilterOptions selectedFilter = FilterOptions.All;
-
-    private List<Todo> VisibleTodos => selectedFilter switch
-    {
-        FilterOptions.Completed => todos.Where(todos => todos.IsCompleted).ToList(),
-        FilterOptions.Uncompleted => todos.Where(todos => !todos.IsCompleted).ToList(),
-        FilterOptions.All => todos,
-    };
 }
