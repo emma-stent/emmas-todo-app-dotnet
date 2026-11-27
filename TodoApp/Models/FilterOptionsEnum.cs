@@ -1,4 +1,4 @@
-namespace BlazorWebAppMovies.Models;
+namespace TodoApp.Models;
 
 public enum FilterOptions
 {
