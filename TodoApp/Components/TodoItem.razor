@@ -1,0 +1,54 @@
+<li>
+    @if (isBeingEdited)
+    {
+        <input @bind=newTitle />
+        <TodoButton OnClick="HandleSaveNewTitle">Save</TodoButton>
+    }
+    else
+    {
+        <label>
+            <span class="@(Item.IsCompleted ? "text-decoration-line-through" : "")">@Item.Title</span>
+            <input type="checkbox" checked="@Item.IsCompleted" @onchange="HandleCheck" />
+        </label>
+        @if (!Item.IsCompleted)
+        {
+            <TodoButton OnClick="HandleEdit">Edit</TodoButton>
+        }
+    }
+</li>
+
+@code {
+    [Parameter]
+    public Todo Item { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<Todo> OnCheck { get; set; }
+
+    [Parameter]
+    public EventCallback<(Todo todo, string newTitle)> OnSaveNewTitle { get; set; }
+
+    private bool isBeingEdited { get; set; }
+
+    private string newTitle { get; set; } = "";
+
+    private async Task HandleCheck()
+    {
+        await OnCheck.InvokeAsync(Item);
+    }
+
+    private async Task HandleSaveNewTitle()
+    {
+        if (string.IsNullOrWhiteSpace(newTitle))
+        {
+            return;
+        }
+        await OnSaveNewTitle.InvokeAsync((Item, newTitle));
+        isBeingEdited = false;
+    }
+
+    private void HandleEdit()
+    {
+        isBeingEdited = true;
+        newTitle = Item.Title;
+    }
+}

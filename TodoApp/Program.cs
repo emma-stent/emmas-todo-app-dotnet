@@ -1,4 +1,4 @@
-using BlazorWebAppMovies.Components;
+using TodoApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 

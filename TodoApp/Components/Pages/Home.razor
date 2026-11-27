@@ -1,0 +1,60 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<h1>Todo List</h1>
+
+<div class="btn-group">
+    @foreach (var filterOption in Enum.GetValues<FilterOptions>())
+    {
+        <TodoButton OnClick="() => selectedFilter = filterOption" IsSelected="selectedFilter == filterOption">@filterOption
+        </TodoButton>
+    }
+</div>
+
+<AddTodo OnAdd="HandleAdd" />
+
+<TodoList Todos="VisibleTodos" OnCheck="HandleCheck" OnSaveNewTitle="HandleSaveNewTitle" />
+
+<TodoButton OnClick="HandleDeleteCompleted" IsDisabled="!todos.Any(todo => todo.IsCompleted)">Delete Completed Todos
+</TodoButton>
+
+@code {
+    private List<Todo> todos = new()
+        {
+            new Todo { Title = "Todo 1" },
+            new Todo { Title = "Todo 2" },
+            new Todo { Title = "Todo 3", IsCompleted = true },
+        };
+
+    private FilterOptions selectedFilter = FilterOptions.All;
+
+    private List<Todo> VisibleTodos => selectedFilter switch
+    {
+        FilterOptions.Completed => todos.Where(todo => todo.IsCompleted).ToList(),
+        FilterOptions.Uncompleted => todos.Where(todo => !todo.IsCompleted).ToList(),
+        _ => todos,
+    };
+
+    private void HandleAdd(string text)
+    {
+        todos.Add(new Todo { Title = text });
+    }
+
+    private void HandleCheck(Todo todo)
+    {
+        todo.IsCompleted = !todo.IsCompleted;
+    }
+
+    private void HandleDeleteCompleted()
+    {
+        todos.RemoveAll(todo => todo.IsCompleted);
+    }
+
+    private void HandleSaveNewTitle((Todo todo, string newTitle) edit)
+    {
+        edit.todo.Title = edit.newTitle;
+    }
+
+}

@@ -1,0 +1,24 @@
+<form @onsubmit="HandleSubmit">
+    <label>Add todo:
+        <input @bind="inputValue" />
+    </label>
+    <TodoButton ButtonType="submit">Add</TodoButton>
+</form>
+
+@code {
+    [Parameter]
+    public EventCallback<string> OnAdd { get; set; }
+        
+    private string? inputValue;
+
+    private async Task HandleSubmit()
+    {
+        if (string.IsNullOrWhiteSpace(inputValue))
+        {
+            return;
+        }
+        await OnAdd.InvokeAsync(inputValue);
+        inputValue = "";
+    }
+
+}

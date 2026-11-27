@@ -1,0 +1,8 @@
+namespace TodoApp.Models;
+
+public enum FilterOptions
+{
+    All,
+    Uncompleted,
+    Completed
+}
